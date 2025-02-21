@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College.com - Your Virtual Upperclassman</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #3498db;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .section {
+            background-color: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .profile, .projects, .search, .messaging {
+            margin-bottom: 20px;
+        }
+        input, textarea, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #results {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>College.com</h1>
+            <p>Your Virtual Upperclassman - Connecting the Campus Community</p>
+        </header>
+        
+        <nav>
+            <a href="#profile">Profile</a>
+            <a href="#projects">Projects</a>
+            <a href="#search">Search & Match</a>
+            <a href="#messaging">Messaging</a>
+            <a href="#community">Community</a>
+        </nav>
+
+        <div class="section" id="profile">
+            <h2>Profile Creation</h2>
+            <input type="text" id="major" placeholder="Your Major">
+            <input type="text" id="skills" placeholder="Your Skills (e.g., Coding, Design)">
+            <input type="text" id="interests" placeholder="Your Interests">
+            <textarea id="portfolio" placeholder="Add links to your past work (e.g., GitHub, portfolio)"></textarea>
+            <button onclick="saveProfile()">Save Profile</button>
+        </div>
+
+        <div class="section" id="projects">
+            <h2>Project Postings</h2>
+            <input type="text" id="projectTitle" placeholder="Project Title">
+            <textarea id="projectDesc" placeholder="Describe your project and roles needed"></textarea>
+            <input type="text" id="tags" placeholder="Tags (e.g., #Marketing, #Engineering)">
+            <button onclick="postProject()">Post Project</button>
+            <div id="projectList"></div>
+        </div>
+
+        <div class="section" id="search">
+            <h2>Search & Match</h2>
+            <input type="text" id="searchQuery" placeholder="Search by major, skill, or interest">
+            <button onclick="search()">Search</button>
+            <div id="results"></div>
+        </div>
+
+        <div class="section" id="messaging">
+            <h2>Messaging</h2>
+            <input type="text" id="recipient" placeholder="Recipient (e.g., username)">
+            <textarea id="message" placeholder="Type your message"></textarea>
+            <button onclick="sendMessage()">Send Message</button>
+            <div id="messageList"></div>
+        </div>
+
+        <div class="section" id="community">
+            <h2>Campus Community</h2>
+            <p>Join exclusive discussions and collaborations with verified students.</p>
+            <button onclick="joinCommunity()">Join Community</button>
+        </div>
+    </div>
+
+    <script>
+        // Simulated data storage (replace with backend in production)
+        let profiles = [];
+        let projects = [];
+        let messages = [];
+
+        function saveProfile() {
+            const major = document.getElementById('major').value;
+            const skills = document.getElementById('skills').value;
+            const interests = document.getElementById('interests').value;
+            const portfolio = document.getElementById('portfolio').value;
+            profiles.push({ major, skills, interests, portfolio });
+            alert('Profile saved!');
+            clearInputs('profile');
+        }
+
+        function postProject() {
+            const title = document.getElementById('projectTitle').value;
+            const desc = document.getElementById('projectDesc').value;
+            const tags = document.getElementById('tags').value;
+            projects.push({ title, desc, tags });
+            displayProjects();
+            clearInputs('projects');
+        }
+
+        function displayProjects() {
+            const projectList = document.getElementById('projectList');
+            projectList.innerHTML = projects.map(p => 
+                `<p><strong>${p.title}</strong>: ${p.desc} <br>Tags: ${p.tags}</p>`
+            ).join('');
+        }
+
+        function search() {
+            const query = document.getElementById('searchQuery').value.toLowerCase();
+            const results = profiles.filter(p => 
+                p.major.toLowerCase().includes(query) || 
+                p.skills.toLowerCase().includes(query) || 
+                p.interests.toLowerCase().includes(query)
+            );
+            document.getElementById('results').innerHTML = results.length > 0 
+                ? results.map(r => `<p>${r.major} - Skills: ${r.skills}</p>`).join('')
+                : 'No matches found.';
+        }
+
+        function sendMessage() {
+            const recipient = document.getElementById('recipient').value;
+            const message = document.getElementById('message').value;
+            messages.push({ recipient, message });
+            displayMessages();
+            clearInputs('messaging');
+        }
+
+        function displayMessages() {
+            const messageList = document.getElementById('messageList');
+            messageList.innerHTML = messages.map(m => 
+                `<p>To: ${m.recipient} - ${m.message}</p>`
+            ).join('');
+        }
+
+        function joinCommunity() {
+            alert('Welcome to the College.com Community!');
+        }
+
+        function clearInputs(sectionId) {
+            const inputs = document.querySelectorAll(`#${sectionId} input, #${sectionId} textarea`);
+            inputs.forEach(input => input.value = '');
+        }
+    </script>
+</body>
+</html>
